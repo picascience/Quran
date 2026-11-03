@@ -24,11 +24,23 @@ export const CONFIG = {
     tafsir: 'https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@v1.2.2/tafsir',
     tafsirs: { en: 'en-tafisr-ibn-kathir', ar: 'ar-tafsir-ibn-kathir' },
   },
+  // French tafsir: not offered by api.quran.com/api/v4/resources/tafsirs, so it is always
+  // loaded from the static dataset. "Al-Mukhtasar fi Tafsir al-Quran al-Karim" (Markaz Tafsir
+  // lil-Dirasat al-Qur'aniyya), French edition = QUL / Tarteel resource 259, slug french-mokhtasar.
+  frenchTafsir: {
+    name: 'Al-Mukhtasar (QUL n° 259) via spa5k/tafsir_api',
+    slug: 'french-mokhtasar',
+    bases: [
+      'https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@v1.2.2/tafsir',
+      'https://fastly.jsdelivr.net/gh/spa5k/tafsir_api@v1.2.2/tafsir',
+    ],
+  },
   timeoutMs: 9000,
 };
 
 export const LABELS = {
   fr: 'Hamidullah (français)',
   en: 'Saheeh International (English)',
-  tafsir: { en: 'Ibn Kathir — anglais (abrégé)', ar: 'Ibn Kathir — arabe (original)' },
+  tafsir: { fr: 'Al-Mukhtasar fi Tafsir al-Qur’an — français', en: 'Ibn Kathir — anglais (abrégé)', ar: 'Ibn Kathir — arabe (original)' },
+  tafsirTitle: { fr: 'Tafsir Al-Mukhtasar', en: 'Tafsir Ibn Kathir', ar: 'Tafsir Ibn Kathir' },
 };

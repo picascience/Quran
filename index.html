@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Le Noble Coran — lecture, traduction et tafsir Ibn Kathir</title>
-  <meta name="description" content="Lire le Coran en arabe (écriture uthmanie) avec la traduction de Hamidullah et le tafsir d'Ibn Kathir pour chaque verset.">
+  <meta name="description" content="Lire le Coran en arabe (écriture uthmanie) avec la traduction de Hamidullah, le tafsir Al-Mukhtasar en français et le tafsir d'Ibn Kathir pour chaque verset.">
   <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://api.quran.com" crossorigin>
@@ -45,6 +45,7 @@
           <li><a href="https://github.com/spa5k/tafsir_api" rel="noopener">spa5k/tafsir_api</a> v1.2.2 (licence MIT, données issues de Quran.com) via jsDelivr — Tafsir Ibn Kathir arabe et anglais abrégé.</li>
         </ul>
       </li>
+      <li><strong>Tafsir en français :</strong> <em>Al-Mukhtasar fi Tafsir al-Qur'an al-Karim</em>, rédigé par le <a href="https://tafsir.net/" rel="noopener">Markaz Tafsir lil-Dirasat al-Qur'aniyya</a> (Centre de tafsir pour les études coraniques, Arabie saoudite), édition française publiée sur <a href="https://quranenc.com/fr/browse/french_mokhtasar/1" rel="noopener">QuranEnc.com</a> et diffusée par <a href="https://qul.tarteel.ai/resources/tafsir/259" rel="noopener">QUL / Tarteel (ressource n° 259)</a> ; chargé via <a href="https://github.com/spa5k/tafsir_api" rel="noopener">spa5k/tafsir_api</a> v1.2.2 (<code>french-mokhtasar</code>) sur jsDelivr. Ce n'est pas une traduction d'Ibn Kathir. Usage non commercial.</li>
       <li>Police : <a href="https://github.com/aliftype/amiri" rel="noopener">Amiri Quran</a> © The Amiri Project Authors, <a href="fonts/OFL.txt">SIL Open Font License 1.1</a>.</li>
     </ul>
     <p class="muted">Sans publicité, sans suivi, sans cookies. Les réglages sont gardés uniquement dans votre navigateur.</p>
@@ -53,14 +54,15 @@
   <dialog id="tafsir" class="sheet" aria-labelledby="tafsir-title">
     <div class="sheet-head">
       <div>
-        <p class="sheet-kicker">Tafsir Ibn Kathir</p>
+        <p class="sheet-kicker" id="tafsir-kicker">Tafsir</p>
         <h2 id="tafsir-title">—</h2>
       </div>
       <button class="icon-btn" type="button" data-close aria-label="Fermer">✕</button>
     </div>
     <div class="tabs" role="tablist" aria-label="Langue du tafsir">
-      <button type="button" role="tab" data-lang="en">Anglais (abrégé)</button>
-      <button type="button" role="tab" data-lang="ar">العربية (الأصل)</button>
+      <button type="button" role="tab" data-lang="fr">Français<small>Al-Mukhtasar</small></button>
+      <button type="button" role="tab" data-lang="en">English<small>Ibn Kathir abrégé</small></button>
+      <button type="button" role="tab" data-lang="ar">العربية<small>ابن كثير</small></button>
     </div>
     <div class="sheet-body" id="tafsir-body" tabindex="0"></div>
   </dialog>
@@ -84,8 +86,9 @@
       </fieldset>
       <fieldset>
         <legend>Tafsir par défaut</legend>
-        <label class="check"><input type="radio" name="tafsir-lang" value="en"> Anglais (abrégé)</label>
-        <label class="check"><input type="radio" name="tafsir-lang" value="ar"> Arabe (original)</label>
+        <label class="check"><input type="radio" name="tafsir-lang" value="fr"> Français — Al-Mukhtasar</label>
+        <label class="check"><input type="radio" name="tafsir-lang" value="en"> Anglais — Ibn Kathir (abrégé)</label>
+        <label class="check"><input type="radio" name="tafsir-lang" value="ar"> Arabe — Ibn Kathir (original)</label>
       </fieldset>
       <fieldset>
         <legend>Apparence</legend>

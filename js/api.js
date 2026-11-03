@@ -155,9 +155,17 @@ async function primaryTafsir(lang, s, a) {
   return { kind: 'html', body: t.text || '', verseKeys: keys.length ? keys : [`${s}:${a}`], resourceName: t.resource_name };
 }
 
-async function fallbackTafsir(lang, s, a, count) {
-  const slug = F.tafsirs[lang];
-  const one = (i) => cached(`ft:${slug}:${s}:${i}`, () => getJSON(`${F.tafsir}/${slug}/${s}/${i}.json`));
+// Static per-ayah tafsir files (spa5k/tafsir_api layout: {base}/{slug}/{surah}/{ayah}.json).
+// `bases` are tried in order (same files on several CDN hostnames).
+async function staticTafsir(slug, bases, s, a, count) {
+  const fetchOne = async (i) => {
+    let last;
+    for (const b of bases) {
+      try { return await getJSON(`${b}/${slug}/${s}/${i}.json`); } catch (e) { last = e; }
+    }
+    throw last;
+  };
+  const one = (i) => cached(`ft:${slug}:${s}:${i}`, () => fetchOne(i));
   const base = (await one(a)).text || '';
   // The mirror repeats the same passage on every ayah it covers: find the range by comparing neighbours.
   let lo = a, hi = a;
@@ -182,9 +190,19 @@ async function fallbackTafsir(lang, s, a, count) {
 }
 
 export function getTafsir(lang, s, a, count) {
+  if (lang === 'fr') {
+    const FR = CONFIG.frenchTafsir;
+    return cached(`tafsir:fr:${s}:${a}`, async () => {
+      try {
+        return { source: 'french', data: await staticTafsir(FR.slug, FR.bases, s, a, count) };
+      } catch (e) {
+        throw new SourceError('La source du tafsir en français est injoignable. Vérifiez votre connexion puis réessayez.');
+      }
+    });
+  }
   return cached(`tafsir:${lang}:${s}:${a}`, () => withFallback(
     () => primaryTafsir(lang, s, a),
-    () => fallbackTafsir(lang, s, a, count),
+    () => staticTafsir(F.tafsirs[lang], [F.tafsir], s, a, count),
   ));
 }
 

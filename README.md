@@ -1,8 +1,12 @@
 # Le Noble Coran — lecture, traduction et tafsir Ibn Kathir
 
 Site statique (HTML + CSS + JavaScript, sans build) pour lire le Coran : texte arabe uthmani,
-traduction de Hamidullah (et Saheeh International en option), et le tafsir d'Ibn Kathir de
-chaque verset en touchant le verset.
+traduction de Hamidullah (et Saheeh International en option), et le tafsir de chaque verset en
+le touchant : Al-Mukhtasar en français (par défaut), Ibn Kathir en anglais (abrégé) ou en arabe.
+
+**À savoir :** il n'existe pas de traduction française d'Ibn Kathir disponible librement et
+vérifiable en ligne. Le tafsir français est donc Al-Mukhtasar, un tafsir abrégé rédigé par un
+comité du Centre de tafsir pour les études coraniques. Le site l'indique clairement dans le panneau.
 
 **Aucun texte n'est écrit par le site.** Le Coran, les traductions et le tafsir sont chargés
 tels quels au moment de la lecture depuis les sources ci-dessous.
@@ -17,6 +21,7 @@ tels quels au moment de la lecture depuis les sources ci-dessous.
 | Anglais | traduction **id 20** — Saheeh International | `eng-ummmuhammad` (Tanzil.net) |
 | Tafsir anglais | tafsir **id 169** — Ibn Kathir (Abridged), slug `en-tafisr-ibn-kathir` | `spa5k/tafsir_api@v1.2.2` `en-tafisr-ibn-kathir` |
 | Tafsir arabe | tafsir **id 14** — Tafsir Ibn Kathir, slug `ar-tafsir-ibn-kathir` | `spa5k/tafsir_api@v1.2.2` `ar-tafsir-ibn-kathir` |
+| Tafsir français | — (absent de l'API Quran.com) | **Al-Mukhtasar fi Tafsir al-Qur'an al-Karim**, Markaz Tafsir lil-Dirasat al-Qur'aniyya ; édition française publiée sur QuranEnc (`french_mokhtasar`), ressource QUL / Tarteel n° 259 ; chargée via `spa5k/tafsir_api@v1.2.2` `french-mokhtasar` (jsDelivr, puis fastly.jsdelivr.net) |
 
 Les identifiants viennent de `https://api.quran.com/api/v4/resources/translations` et
 `https://api.quran.com/api/v4/resources/tafsirs`. Ils sont tous dans `js/config.js`.

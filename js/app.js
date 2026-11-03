@@ -6,7 +6,7 @@ const main = $('#main');
 
 /* ---------------- Settings (saved in the browser) ---------------- */
 
-const DEFAULTS = { arSize: 34, trSize: 17, showFr: true, showEn: false, tafsirLang: 'en', theme: 'auto' };
+const DEFAULTS = { arSize: 34, trSize: 17, showFr: true, showEn: false, tafsirLang: 'fr', theme: 'auto' };
 const settings = (() => {
   try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem('quran.settings') || '{}') }; }
   catch { return { ...DEFAULTS }; }
@@ -44,7 +44,7 @@ const norm = (s) => (s || '').toLowerCase().normalize('NFD')
   .replace(/[̀-ًͯ-ٰٟۖ-ۭ]/g, '') // Latin accents + Arabic diacritics
   .replace(/[ٱأإآ]/g, 'ا').replace(/[^a-z0-9ء-ي ]/g, '');
 const revLabel = (r) => (r === 'madinah' ? 'Médinoise' : 'Mecquoise');
-const sourceName = (src) => (src === 'primary' ? `${CONFIG.primary.name} (quran.com)` : CONFIG.fallback.name);
+const sourceName = (src) => ({ primary: `${CONFIG.primary.name} (quran.com)`, fallback: CONFIG.fallback.name, french: CONFIG.frenchTafsir.name }[src] || src);
 
 function toast(msg) {
   const t = $('#toast');
@@ -161,7 +161,7 @@ async function renderHome() {
   main.replaceChildren(
     el('section', { class: 'intro' },
       el('h1', { text: 'Le Noble Coran' }),
-      el('p', { class: 'muted', text: 'Choisissez une sourate. Touchez un verset pour lire le tafsir d’Ibn Kathir correspondant.' }),
+      el('p', { class: 'muted', text: 'Choisissez une sourate. Touchez un verset pour lire son tafsir (Al-Mukhtasar en français, Ibn Kathir en anglais ou en arabe).' }),
       form),
     list, empty,
     el('p', { class: 'source-line', text: `Liste des sourates : ${sourceName(res.source)}` }));
@@ -263,6 +263,7 @@ function openTafsir(key, lang = tafsirState.lang || settings.tafsirLang) {
   const [s] = key.split(':').map(Number);
   const name = surahCtx?.chapter?.nameSimple || `Sourate ${s}`;
   $('#tafsir-title').textContent = `${name} · verset ${key}`;
+  $('#tafsir-kicker').textContent = LABELS.tafsirTitle[lang];
   history.replaceState(null, '', `#${key}`);
   dlg.querySelectorAll('[role=tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.lang === lang)));
   if (!dlg.open) dlg.showModal();
@@ -287,7 +288,7 @@ async function loadTafsir() {
   if (keys.length > 1) {
     out.push(el('p', { class: 'range-note', role: 'note' },
       el('strong', { text: 'Passage commun : ' }),
-      `ce commentaire d’Ibn Kathir porte sur les versets ${keys[0]} à ${keys[keys.length - 1]} ensemble (${keys.length} versets). Il s’affiche donc à l’identique pour chacun d’eux.`));
+      `ce commentaire porte sur les versets ${keys[0]} à ${keys[keys.length - 1]} ensemble (${keys.length} versets). Il s’affiche donc à l’identique pour chacun d’eux.`));
   }
   const content = el('div', { class: `tafsir-text ${lang === 'ar' ? 'is-ar' : ''}`, lang, dir: lang === 'ar' ? 'rtl' : 'ltr' });
   if (!t.body || !t.body.trim()) {
@@ -300,7 +301,10 @@ async function loadTafsir() {
   out.push(content);
   out.push(el('p', { class: 'source-line' },
     `${LABELS.tafsir[lang]} — ${sourceName(res.source)}`,
-    res.source === 'primary' ? ` (tafsir id ${CONFIG.primary.tafsirs[lang]})` : ` (${CONFIG.fallback.tafsirs[lang]})`));
+    res.source === 'primary' ? ` (tafsir id ${CONFIG.primary.tafsirs[lang]})` : res.source === 'french' ? '' : ` (${CONFIG.fallback.tafsirs[lang]})`));
+  if (lang === 'fr') {
+    out.push(el('p', { class: 'source-line', text: 'Al-Mukhtasar est un tafsir abrégé et récent, rédigé par un comité du Markaz Tafsir (Centre de tafsir pour les études coraniques). Ce n’est pas une traduction d’Ibn Kathir : pour Ibn Kathir, choisissez l’onglet anglais ou arabe.' }));
+  }
   body.replaceChildren(...out);
 }
 
