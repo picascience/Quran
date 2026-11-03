@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Le Noble Coran — lecture, traduction et tafsir Ibn Kathir</title>
+  <meta name="description" content="Lire le Coran en arabe (écriture uthmanie) avec la traduction de Hamidullah et le tafsir d'Ibn Kathir pour chaque verset.">
+  <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://api.quran.com" crossorigin>
+  <link rel="preload" href="fonts/amiri-quran-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Apply saved theme before first paint (avoids a flash).
+    try {
+      var s = JSON.parse(localStorage.getItem('quran.settings') || '{}');
+      if (s.theme && s.theme !== 'auto') document.documentElement.dataset.theme = s.theme;
+    } catch (e) {}
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Accueil — liste des sourates">
+      <span class="brand-mark" aria-hidden="true">◆</span> Le Noble Coran
+    </a>
+    <button class="icon-btn" id="open-settings" type="button" aria-label="Réglages" title="Réglages">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+    </button>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <noscript><p class="notice">Ce site a besoin de JavaScript pour charger le texte depuis les sources.</p></noscript>
+  </main>
+
+  <footer class="site-footer">
+    <h2>Sources et licences</h2>
+    <p>Aucun texte du Coran, aucune traduction et aucun tafsir n'est rédigé par ce site : tout est chargé tel quel depuis les sources ci-dessous, au moment de la lecture.</p>
+    <ul>
+      <li><strong>Source principale :</strong> <a href="https://quran.com" rel="noopener">Quran.com</a> / <a href="https://quran.foundation" rel="noopener">Quran Foundation</a> — API publique <code>api.quran.com/api/v4</code> : texte arabe uthmani (<code>text_uthmani</code>), traductions Muhammad Hamidullah (id 31) et Saheeh International (id 20), Tafsir Ibn Kathir arabe (id 14) et anglais abrégé (id 169). Utilisation selon les <a href="https://api-docs.quran.foundation/legal/developer-terms/" rel="noopener">conditions développeurs de la Quran Foundation</a> : affichage seulement, texte non modifié, usage non commercial.</li>
+      <li><strong>Secours automatique</strong> (seulement si l'API est injoignable ; la source utilisée est indiquée sous chaque contenu) :
+        <ul>
+          <li><a href="https://github.com/fawazahmed0/quran-api" rel="noopener">fawazahmed0/quran-api</a> (Unlicense) via jsDelivr — texte arabe « Uthmani Hafs » v13 du <a href="https://qurancomplex.gov.sa/" rel="noopener">Complexe du Roi Fahd</a> ; traductions Hamidullah et Saheeh International issues de <a href="https://tanzil.net/trans/" rel="noopener">Tanzil.net</a> (usage non commercial uniquement).</li>
+          <li><a href="https://github.com/spa5k/tafsir_api" rel="noopener">spa5k/tafsir_api</a> v1.2.2 (licence MIT, données issues de Quran.com) via jsDelivr — Tafsir Ibn Kathir arabe et anglais abrégé.</li>
+        </ul>
+      </li>
+      <li>Police : <a href="https://github.com/aliftype/amiri" rel="noopener">Amiri Quran</a> © The Amiri Project Authors, <a href="fonts/OFL.txt">SIL Open Font License 1.1</a>.</li>
+    </ul>
+    <p class="muted">Sans publicité, sans suivi, sans cookies. Les réglages sont gardés uniquement dans votre navigateur.</p>
+  </footer>
+
+  <dialog id="tafsir" class="sheet" aria-labelledby="tafsir-title">
+    <div class="sheet-head">
+      <div>
+        <p class="sheet-kicker">Tafsir Ibn Kathir</p>
+        <h2 id="tafsir-title">—</h2>
+      </div>
+      <button class="icon-btn" type="button" data-close aria-label="Fermer">✕</button>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Langue du tafsir">
+      <button type="button" role="tab" data-lang="en">Anglais (abrégé)</button>
+      <button type="button" role="tab" data-lang="ar">العربية (الأصل)</button>
+    </div>
+    <div class="sheet-body" id="tafsir-body" tabindex="0"></div>
+  </dialog>
+
+  <dialog id="settings" class="sheet small" aria-labelledby="settings-title">
+    <div class="sheet-head">
+      <h2 id="settings-title">Réglages</h2>
+      <button class="icon-btn" type="button" data-close aria-label="Fermer">✕</button>
+    </div>
+    <form class="settings" method="dialog">
+      <label class="row">Taille du texte arabe <output id="ar-size-out"></output>
+        <input type="range" id="ar-size" min="22" max="60" step="2">
+      </label>
+      <label class="row">Taille de la traduction <output id="tr-size-out"></output>
+        <input type="range" id="tr-size" min="13" max="26" step="1">
+      </label>
+      <fieldset>
+        <legend>Traductions affichées</legend>
+        <label class="check"><input type="checkbox" id="show-fr"> Français — Hamidullah</label>
+        <label class="check"><input type="checkbox" id="show-en"> English — Saheeh International</label>
+      </fieldset>
+      <fieldset>
+        <legend>Tafsir par défaut</legend>
+        <label class="check"><input type="radio" name="tafsir-lang" value="en"> Anglais (abrégé)</label>
+        <label class="check"><input type="radio" name="tafsir-lang" value="ar"> Arabe (original)</label>
+      </fieldset>
+      <fieldset>
+        <legend>Apparence</legend>
+        <label class="check"><input type="radio" name="theme" value="auto"> Automatique</label>
+        <label class="check"><input type="radio" name="theme" value="light"> Clair</label>
+        <label class="check"><input type="radio" name="theme" value="dark"> Sombre</label>
+      </fieldset>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
